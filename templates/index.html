@@ -1,33 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PM2.5 即時空氣品質監測</title>
 </head>
 
 <body>
-    <h1>PM2.5 Data</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                {% for col in result["columns"] %}
-                <th>{{col}}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in result["rows"] %}
-            <tr>
-                {% for data in row %}
-                <td>{{data}}</td>
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </tbody>
+  <h1>🌫 PM2.5 即時空氣品質監測</h1>
+  <p>資料來源：環境部即時 API</p>
+  <p>🕒 資料更新時間：<span id="update-time">
+    </span>
+  </p>
 
+  <div class="kpi-card higher">
+    <span class="kpi-label">🚩 最高測站</span>
+    <span class="kpi-value"> <small>μg/m³</small></span>
+  </div>
+
+  <div class="kpi-card lower">
+    <span class="kpi-label">✅ 最低測站</span>
+    <span class="kpi-value"> <small>μg/m³</small></span>
+  </div>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          {% for col in result["columns"] %}
+          <th>{{col}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in result["rows"] %}
+        <tr>
+          {% for data in row %}
+          <td>{{data}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
-
+  </div>
+  <h1>🌫 PM2.5 即時數據繪製</h1>
+  <div class="controls">
+    <select name="counties" id="counties">
+      <option value="">-- 請選擇縣市 --</option>
+    </select>
+    <button id="btn-six-avg">📊 六都平均值對比</button>
+  </div>
+  <div class="chart-container">
+    <canvas id="pm25Chart"></canvas>
+  </div>
 </body>
 
 </html>
