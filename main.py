@@ -6,6 +6,11 @@ from datetime import datetime
 app = Flask(__name__)
 
 
+@app.errorhandler(404)
+def error_404(e):
+    return render_template("404.html")
+
+
 # 取得六都資料
 @app.route("/api/data/six-county")
 def api_data_six_county():
