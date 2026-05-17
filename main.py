@@ -24,7 +24,10 @@ def api_counties():
 def index():
 
     result = database.get_latest_data()
-    return render_template("index.html", result=result)
+    counties = database.get_counties()["rows"]
+    counties = [c[0] for c in counties]  # 只需要第1行(0位置)的值
+
+    return render_template("index.html", result=result, counties=counties)
 
 
 if __name__ == "__main__":

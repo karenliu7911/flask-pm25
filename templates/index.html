@@ -48,12 +48,34 @@
   <div class="controls">
     <select name="counties" id="counties">
       <option value="">-- 請選擇縣市 --</option>
+
+      {% for county in counties %}
+      <option value="{{county}}">{{county}}</option>
+      {% endfor %}
+
+
+
+
     </select>
     <button id="btn-six-avg">📊 六都平均值對比</button>
   </div>
   <div class="chart-container">
     <canvas id="pm25Chart"></canvas>
   </div>
+
+  <script>
+    const countiesE1=document.querySelector("#counties");
+    console.log(countiesE1);
+
+
+
+  </script>
+
+
+
+
+
+
 </body>
 
 </html>
