@@ -215,18 +215,25 @@
   <h1>🌫 PM2.5 即時空氣品質監測</h1>
   <p>資料來源：環境部即時 API</p>
   <p>🕒 資料更新時間：<span id="update-time">
+    {{data.datetime}}
     </span>
   </p>
 
+  {% if data %}
   <div class="kpi-card higher">
-    <span class="kpi-label">🚩 最高測站</span>
-    <span class="kpi-value"> <small>μg/m³</small></span>
+    <span class="kpi-label">🚩 最高測站:</span>
+    <span class="kpi-value"> <small>{{data.max[0]}} | {{data.max[1]}} μg/m³</small></span>
   </div>
 
   <div class="kpi-card lower">
     <span class="kpi-label">✅ 最低測站</span>
-    <span class="kpi-value"> <small>μg/m³</small></span>
+    <span class="kpi-value"> <small>{{data.min[0]}} | {{data.min[1]}} μg/m³</small></span>
   </div>
+  {% else %}
+  <span class="kpi-value">資料取得失敗</span>
+  {% endif %}
+
+
   </div>
   <div class="table-container">
     <table>
@@ -268,14 +275,39 @@
 
 
   <script>
-    const countiesE1=document.querySelector("#counties");
+    const countiesEl=document.querySelector("#counties");
+    const sixCountyBtnEl=document.querySelector("#btn-six-avg");
     const countyCtx=document.querySelector("#pm25Chart");
-    console.log(countiesE1);
+    
+    console.log(countiesEl,sixCountyBtnEl);
+
+    //監聽click的行為
+    sixCountyBtnEl.addEventListener("click",(e)=>{
+
+      fetch(`/api/data/six-county`)    //注意!! 使用反引號(`)-鍵盤Esc鍵
+      .then(res=>res.json())
+      .then(data=>{
+        const labels=data.labels;    //X軸標籤
+        const values=data.values;   //Y軸標籤
+
+        console.log(labels,values);        
+
+          myChart.data.labels = labels;
+          myChart.data.datasets[0].label = `六都 PM2.5 平均值`;
+          myChart.data.datasets[0].data = values;
+          myChart.data.datasets[0].backgroundColor = 'rgba(153,102,153,0.5)';
+          myChart.data.datasets[0].borderColor = 'rgba(153,102,153,1)';
+          myChart.update();
+        })
+
+    });
+
 
     // 監聽change的行為
-    countiesE1.addEventListener("change", (e) => {
-      let county = countiesE1.value;
+    countiesEl.addEventListener("change", (e) => {
+      let county = countiesEl.value;
       console.log(county);
+
       fetch(`/api/data/${county}`)    //注意!! 使用反引號(`)-鍵盤Esc鍵
       .then(res=>res.json())
       .then(data=>{
@@ -317,6 +349,8 @@
     });
 
     console.log(myChart);
+
+
 
   </script>
 
